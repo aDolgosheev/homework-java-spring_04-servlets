@@ -9,9 +9,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class MainServlet extends HttpServlet {
-  public static final String API_POSTS = "/api/posts";
-  public static final String API_POSTS_D = "/api/posts/\\d+";
-  public static final String STR = "/";
+  private static final String API_POSTS = "/api/posts";
+  private static final String API_POSTS_D = "/api/posts/\\d+";
+  private static final String STR = "/";
+
+  private static final String GET = "GET";
+  private static final String POST = "POST";
+  private static final String DELETE = "DELETE";
   private PostController controller;
 
   @Override
@@ -28,20 +32,20 @@ public class MainServlet extends HttpServlet {
       final var path = req.getRequestURI();
       final var method = req.getMethod();
       // primitive routing
-      if (method.equals("GET") && path.equals(API_POSTS)) {
+      if (method.equals(GET) && path.equals(API_POSTS)) {
         controller.all(resp);
         return;
       }
-      if (method.equals("GET") && path.matches(API_POSTS_D)) {
+      if (method.equals(GET) && path.matches(API_POSTS_D)) {
         final var id = parseId(path);
         controller.getById(id, resp);
         return;
       }
-      if (method.equals("POST") && path.equals(API_POSTS)) {
+      if (method.equals(POST) && path.equals(API_POSTS)) {
         controller.save(req.getReader(), resp);
         return;
       }
-      if (method.equals("DELETE") && path.matches(API_POSTS_D)) {
+      if (method.equals(DELETE) && path.matches(API_POSTS_D)) {
         final var id = parseId(path);
         controller.removeById(id, resp);
         return;
